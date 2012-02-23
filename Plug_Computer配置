@@ -1,0 +1,39 @@
+环境：PC机（Ubuntu）、Plug Computer
+
+1.在PC上运行"sudo apt-get install minicom"安装minicom
+
+2.将Plug Computer插在插座上，插入网线，使用USB线将Plug Computer与PC相连
+
+3.在pc上运行"dmesg"，在输出信息中找到如下信息：
+[ 6488.743151] usb 2-1.1: FTDI USB Serial Device converter now attached to ttyUSB0
+记住最后的ttyUSB0（可能是ttyUSB1等其他值）
+
+4.运行"sudo minicom -s"，进入"Serial port setup"
+
+5.将页面如下设置（ttyUSB0处改为之前用dmesg看到的字符串），按回车保存
+| A -    Serial Device      : /dev/ttyUSB0      |
+| B - Lockfile Location     : /var/lock         |
+| C -   Callin Program      :                   |
+| D -  Callout Program      :                   |
+| E -    Bps/Par/Bits       : 115200 8N1        |
+| F - Hardware Flow Control : No                |
+| G - Software Flow Control : No                |
+
+6.选择"Save setup as dfl"并回车保存
+
+7.选择"Exit"或按Esc键退出设置
+
+8.屏幕上会显示"debian login:"，使用用户名root密码root登录
+若显示乱码，则按Ctrl+A Z退出并重新尝试登录
+（之后可以跳过第5步和第6步的设置过程，或者直接运行
+"sudo minicom --device /dev/ttyUSB0"来登录Plug  Computer）
+
+9.成功登录Plug Computer后，运行"ifconfig"查看Plug Computer的IP地址如192.168.0.210
+退出登录和minicom
+
+10.在pc中运行 "ssh 192.168.0.210 -l root" （将IP地址改为刚才得到的IP地址）
+来登录到Plug Computer
+
+11.进入 {osgi_kit目录}/osgi-hgw/bin/vms/j9/
+运行 "./server" 启动OSGi framework
+现在可以在pc上访问http://192.168.0.210/system/console来管理（用户名密码默认都是admin）
