@@ -44,7 +44,7 @@ public class Activator implements BundleActivator {
 					File image = filelist[i];
 					if (image.isFile() && image.canRead()) {
 						
-						// proceed
+						// TODO send the image to the server
 						
 						image.delete();
 					}
