@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OSGi_PlugComputer
+Bundle-SymbolicName: OSGi_PlugComputer
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: osgi_plugcomputer.Activator
+Import-Package: ch.ethz.iks.r_osgi,
+ ch.ethz.iks.slp,
+ org.osgi.framework;version="1.3.0",
+ osgi_interface
+Bundle-RequiredExecutionEnvironment: OSGi/Minimum-1.0

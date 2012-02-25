@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OSGi_Interface
+Bundle-SymbolicName: OSGi_Interface
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: osgi_interface.Activator
+Bundle-RequiredExecutionEnvironment: OSGi/Minimum-1.0
+Export-Package: osgi_interface
+Import-Package: org.osgi.framework;version="1.3.0"

@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OSGi_Server
+Bundle-SymbolicName: OSGi_Server
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: osgi_server.Activator
+Import-Package: ch.ethz.iks.r_osgi,
+ ch.ethz.iks.slp,
+ org.osgi.framework;version="1.3.0",
+ osgi_interface
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
