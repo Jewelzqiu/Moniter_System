@@ -13,8 +13,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
-import osgi_interface.SendImage;
-import sendimage_impl.SendImageImpl;
+import osgi_interface.Services;
+import services_impl.ServicesImpl;
 
 import ch.ethz.iks.r_osgi.RemoteOSGiService;
 import ch.ethz.iks.slp.Advertiser;
@@ -23,12 +23,9 @@ import ch.ethz.iks.slp.ServiceURL;
 public class Activator implements BundleActivator {
 
 	private static BundleContext context;
-	@SuppressWarnings("rawtypes")
 	ServiceRegistration registration; 
 	Advertiser advertiser; 
-	@SuppressWarnings("rawtypes")
 	ServiceReference advRef; 
-	@SuppressWarnings("rawtypes")
 	Hashtable properties = new Hashtable(); 
 	String IPAddr = new String(); 
 
@@ -40,7 +37,6 @@ public class Activator implements BundleActivator {
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
-	@SuppressWarnings("unchecked")
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
 		
@@ -53,8 +49,8 @@ public class Activator implements BundleActivator {
 		
 		advRef = context.getServiceReference(Advertiser.class.getName());         
 	    properties.put(RemoteOSGiService.R_OSGi_REGISTRATION, Boolean.TRUE);     
-	    registration = context.registerService(SendImage.class.getName(), 
-	        new SendImageImpl(),  properties); 
+	    registration = context.registerService(Services.class.getName(), 
+	        new ServicesImpl(),  properties); 
 	     
 	    getIPAddresses();
 	    if (IPAddr.equals("")) { 
@@ -88,7 +84,6 @@ public class Activator implements BundleActivator {
 	}
 
 	// get the IP address of the local machine
-	@SuppressWarnings("rawtypes")
 	public void getIPAddresses() throws SocketException {
 	    Enumeration e = NetworkInterface.getNetworkInterfaces(); 
 	    while (e.hasMoreElements()) { 

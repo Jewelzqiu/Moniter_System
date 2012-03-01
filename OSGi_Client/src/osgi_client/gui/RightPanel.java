@@ -1,7 +1,6 @@
 package osgi_client.gui;
 
 import java.awt.Dimension;
-
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
@@ -11,11 +10,16 @@ public class RightPanel extends JPanel {
 	ImagePanel imagePanel = new ImagePanel();
 	
 	public RightPanel() {
-		this.setSize(400, 600);
+		this.setSize(500, 450);
 		this.add(detailPanel);
-		detailPanel.setPreferredSize(new Dimension(400, 200));
+		detailPanel.setPreferredSize(new Dimension(500, 36));
 		this.add(imagePanel);
-		imagePanel.setPreferredSize(new Dimension(400, 400));
+		imagePanel.setPreferredSize(new Dimension(500, 400));
+	}
+	
+	void updateDetail(String name, String localname) {
+		detailPanel.updateDetail(name);
+		imagePanel.updateDetail(localname);
 	}
 	
 }

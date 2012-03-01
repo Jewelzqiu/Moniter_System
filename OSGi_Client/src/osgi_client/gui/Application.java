@@ -2,31 +2,42 @@ package osgi_client.gui;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-
+import java.awt.Font;
 import javax.swing.JFrame;
-
-import org.osgi.framework.BundleContext;
+import osgi_client.Activator;
 
 @SuppressWarnings("serial")
 public class Application extends JFrame {
 	
-	BundleContext context;
-	ListPanel listPanel = new ListPanel();
+	Activator activator;
+	LeftPanel leftPanel = new LeftPanel(this);
 	RightPanel rightPanel = new RightPanel();
 	
-	public void init(BundleContext context) {
-		this.context = context;
-		
+	public void init(Activator activator) {
+		this.activator = activator;
+		this.setFont(new Font("Microsoft Yahei", Font.PLAIN, 12));
 		this.setTitle("Moniter System");
-		this.setSize(630, 645);
+		this.setSize(700, 485);
 		this.setLayout(new FlowLayout());
-		this.add(listPanel);
-		listPanel.setPreferredSize(new Dimension(200, 600));
+		this.add(leftPanel);
+		leftPanel.setPreferredSize(new Dimension(170, 438));
 		this.add(rightPanel);
-		rightPanel.setPreferredSize(new Dimension(400, 600));
+		rightPanel.setPreferredSize(new Dimension(500, 438));
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
 	
+	public void updateData(String[] list) {
+		leftPanel.updateData(list);
+	}
+	
+	void updateDetail(String name) {
+		String filename = activator.getImageName(name);
+		rightPanel.updateDetail(name, filename);
+	}
+	
+	void refresh() {
+		activator.updateData();
+	}
 }

@@ -1,9 +1,6 @@
 package osgi_plugcomputer;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Vector;
 
 import org.osgi.framework.BundleActivator;
@@ -11,7 +8,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 
-import osgi_interface.SendImage;
+import osgi_interface.Services;
+import osgi_interface.Util;
 
 import ch.ethz.iks.r_osgi.RemoteOSGiService;
 import ch.ethz.iks.r_osgi.RemoteServiceReference;
@@ -28,7 +26,7 @@ public class Activator implements BundleActivator {
 	RemoteOSGiService remote; 
 	RemoteServiceReference[] refs; 
 	ServiceReference sref;
-	SendImage sendService;
+	Services sendService;
 	ServiceReference locRef;
 	Thread thread;
 
@@ -70,14 +68,14 @@ public class Activator implements BundleActivator {
 		for (int i = 0; i < ServiceLocation.size(); i++) { 
 			refs = remote.getRemoteServiceReferences( 
 					new URI(ServiceLocation.elementAt(i).toString()), 
-					SendImage.class.getName(), null); 
+					Services.class.getName(), null); 
 			if (refs == null)  { 
 				System.out.println("Service not found at "  
 						+ ServiceLocation.elementAt(i).toString()); 
 				continue; 
 			} 
 		       
-			sendService = (SendImage) remote.getRemoteService(refs[0]);
+			sendService = (Services) remote.getRemoteService(refs[0]);
 			if (sendService != null) {
 				System.out.println("Found service");
 				break;
@@ -113,7 +111,7 @@ public class Activator implements BundleActivator {
 					System.out.println(image.getName());
 					if (image.isFile() && image.canRead()) {						
 						if (sendService != null) {
-							sendService.sendImage(getBytesFromFile(image), image.getName());
+							sendService.sendImage(Util.getBytesFromFile(image), image.getName());
 						}
 						image.delete();
 					}
@@ -122,30 +120,6 @@ public class Activator implements BundleActivator {
 			
 		}
 		
-	}
-	
-	public static byte[] getBytesFromFile(File file) {
-		byte[] ret = null;
-		try {
-			if (file == null) {
-				// log.error("helper:the file is null!");
-				return null;
-			}
-			FileInputStream in = new FileInputStream(file);
-			ByteArrayOutputStream out = new ByteArrayOutputStream(4096);
-			byte[] b = new byte[4096];
-			int n;
-			while ((n = in.read(b)) != -1) {
-				out.write(b, 0, n);
-			}
-			in.close();
-			out.close();
-			ret = out.toByteArray();
-		} catch (IOException e) {
-			// log.error("helper:get bytes from file process error!");
-			e.printStackTrace();
-		}
-		return ret;
 	}
 
 }
