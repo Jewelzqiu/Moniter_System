@@ -1,4 +1,4 @@
-package osgi_client.gui;
+package osgi_server.gui;
 
 import java.awt.Font;
 
@@ -17,7 +17,7 @@ public class Dialog extends JDialog {
 		label.setFont(new Font("Microsoft Yahei", Font.PLAIN, 12));
 		label.setHorizontalAlignment(JLabel.CENTER);
 		label.setText(text);
-		this.setTitle("Client");
+		this.setTitle("Server");
 		this.add(label);
 		this.setVisible(true);
 	}

@@ -56,7 +56,7 @@ public class Activator implements BundleActivator {
 		dialog = new Dialog("Initializing...");
 		application.init(this);
 		
-		dialog.setText("Searching for the server...");
+		dialog.setText("Connecting to  the server...");
 		locRef = context.getServiceReference(Locator.class.getName());  
 		if (locRef == null)  { 
 			System.out.println("locRef is null!");
@@ -104,6 +104,7 @@ public class Activator implements BundleActivator {
 		
 		dialog.setText("Requesting data...");
 		updateData();
+		application.setVisible(true);
 	}
 
 	/*

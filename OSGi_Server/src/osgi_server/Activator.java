@@ -14,6 +14,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
 import osgi_interface.Services;
+import osgi_server.gui.Dialog;
+import osgi_server.gui.MainFrame;
 import services_impl.ServicesImpl;
 
 import ch.ethz.iks.r_osgi.RemoteOSGiService;
@@ -23,9 +25,18 @@ import ch.ethz.iks.slp.ServiceURL;
 public class Activator implements BundleActivator {
 
 	private static BundleContext context;
+	
+	MainFrame application;
+	
+	@SuppressWarnings("rawtypes")
 	ServiceRegistration registration; 
-	Advertiser advertiser; 
-	ServiceReference advRef; 
+	
+	Advertiser advertiser;
+	
+	@SuppressWarnings("rawtypes")
+	ServiceReference advRef;
+	
+	@SuppressWarnings("rawtypes")
 	Hashtable properties = new Hashtable(); 
 	String IPAddr = new String(); 
 
@@ -37,9 +48,11 @@ public class Activator implements BundleActivator {
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@SuppressWarnings("unchecked")
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
 		
+		Dialog dialog = new Dialog("Loading...");
 		String current_path = System.getProperty("user.home");
 		String path = current_path + "/Moniter_images";
 		File folder = new File(path);
@@ -68,6 +81,11 @@ public class Activator implements BundleActivator {
 	    			null); 
 	    	System.out.println("registered: " + "service:osgi:r-osgi://" + IPAddr + ":9278"); 
 	    }
+	    
+	    application = new MainFrame();
+	    application.init();
+	    
+	    dialog.dispose();
 	}
 
 	/*
@@ -84,6 +102,7 @@ public class Activator implements BundleActivator {
 	}
 
 	// get the IP address of the local machine
+	@SuppressWarnings("rawtypes")
 	public void getIPAddresses() throws SocketException {
 	    Enumeration e = NetworkInterface.getNetworkInterfaces(); 
 	    while (e.hasMoreElements()) { 
@@ -99,6 +118,6 @@ public class Activator implements BundleActivator {
 	    		} 
 	    	} 
 	    } 	
-	} 
+	}
 	
 }

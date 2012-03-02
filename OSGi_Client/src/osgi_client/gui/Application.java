@@ -16,7 +16,7 @@ public class Application extends JFrame {
 	public void init(Activator activator) {
 		this.activator = activator;
 		this.setFont(new Font("Microsoft Yahei", Font.PLAIN, 12));
-		this.setTitle("Moniter System");
+		this.setTitle("Moniter System Client");
 		this.setSize(700, 485);
 		this.setLayout(new FlowLayout());
 		this.add(leftPanel);
@@ -25,7 +25,6 @@ public class Application extends JFrame {
 		rightPanel.setPreferredSize(new Dimension(500, 438));
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setVisible(true);
 	}
 	
 	public void updateData(String[] list) {
