@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Monitor Client</string>
+    <string name="refresh">Refresh</string>
+    <string name="images">Images</string>
+    <drawable name="blue">#63B8FF</drawable>
+
+</resources>
