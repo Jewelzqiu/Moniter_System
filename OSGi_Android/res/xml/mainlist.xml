@@ -2,8 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
-    	android:title="@string/refresh"
-   		android:background="#63B8FF">
+    	android:title="@string/refresh" >
     
     	<Preference
     		android:title="@string/refresh"
@@ -13,7 +12,6 @@
     
     <PreferenceCategory
     	android:title="@string/images"
-    	android:key="images"
-    	android:background="#63B8FF"/>
+    	android:key="images" />
 
 </PreferenceScreen>
