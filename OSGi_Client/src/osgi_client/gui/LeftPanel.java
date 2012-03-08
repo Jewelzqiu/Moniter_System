@@ -29,7 +29,7 @@ public class LeftPanel extends JPanel {
 			}
 		});
 		this.add(List);
-		List.setPreferredSize(new Dimension(170, 398));
+		List.setPreferredSize(new Dimension(170, 478));
 	}
 	
 	public void updateData(String[] list) {

@@ -9,8 +9,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.KeyEvent;
 
 public class OSGi_AndroidActivity extends PreferenceActivity {
 	
@@ -49,4 +48,17 @@ public class OSGi_AndroidActivity extends PreferenceActivity {
 		}
     	
     }
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			Log.d("debug", "back");
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			startActivity(intent);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+    
 }

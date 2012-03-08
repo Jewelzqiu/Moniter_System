@@ -24,7 +24,7 @@ public class WelcomeActivity extends Activity {
 	}
 	
 	void init() {
-		ImageList.add("test1");
+		ImageList.add("1_20120308125409.jpg");
 		// TODO 
 	}
 

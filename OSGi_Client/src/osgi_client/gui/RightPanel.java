@@ -12,9 +12,9 @@ public class RightPanel extends JPanel {
 	public RightPanel() {
 		this.setSize(500, 450);
 		this.add(detailPanel);
-		detailPanel.setPreferredSize(new Dimension(500, 36));
+		detailPanel.setPreferredSize(new Dimension(640, 36));
 		this.add(imagePanel);
-		imagePanel.setPreferredSize(new Dimension(500, 400));
+		imagePanel.setPreferredSize(new Dimension(640, 480));
 	}
 	
 	void updateDetail(String name, String localname) {

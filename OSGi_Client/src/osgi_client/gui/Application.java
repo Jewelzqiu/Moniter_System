@@ -17,12 +17,12 @@ public class Application extends JFrame {
 		this.activator = activator;
 		this.setFont(new Font("Microsoft Yahei", Font.PLAIN, 12));
 		this.setTitle("Moniter System Client");
-		this.setSize(700, 485);
+		this.setSize(840, 565);
 		this.setLayout(new FlowLayout());
 		this.add(leftPanel);
-		leftPanel.setPreferredSize(new Dimension(170, 438));
+		leftPanel.setPreferredSize(new Dimension(170, 518));
 		this.add(rightPanel);
-		rightPanel.setPreferredSize(new Dimension(500, 438));
+		rightPanel.setPreferredSize(new Dimension(640, 518));
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
