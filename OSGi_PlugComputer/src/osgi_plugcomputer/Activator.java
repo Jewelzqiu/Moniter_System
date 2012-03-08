@@ -61,14 +61,14 @@ public class Activator implements BundleActivator {
 		
 		sref = context.getServiceReference(RemoteOSGiService.class.getName());  
 		if (sref == null)  { 
-			throw new BundleException("OSGi  remote service not found"); 
+			throw new BundleException("OSGi remote service not found"); 
 		}
 		
 		remote = (RemoteOSGiService) context.getService(sref);     
 		for (int i = 0; i < ServiceLocation.size(); i++) { 
 			refs = remote.getRemoteServiceReferences( 
 					new URI(ServiceLocation.elementAt(i).toString()), 
-					Services.class.getName(), null); 
+					Services.class.getName(), null);
 			if (refs == null)  { 
 				System.out.println("Service not found at "  
 						+ ServiceLocation.elementAt(i).toString()); 
@@ -98,7 +98,7 @@ public class Activator implements BundleActivator {
 	class CheckImage implements Runnable {
 		
 		public void run() {
-			
+			System.out.println("Thread started!");
 			while (true) {				
 				File folder = new File("/home/ftp/images");
 				if (!folder.isDirectory()) {
@@ -108,11 +108,11 @@ public class Activator implements BundleActivator {
 				File[] filelist = folder.listFiles();
 				for (int i = 0; i < filelist.length; i++) {
 					File image = filelist[i];
-					System.out.println(image.getName());
 					if (image.isFile() && image.canRead()) {						
 						if (sendService != null) {
 							sendService.sendImage(Util.getBytesFromFile(image), image.getName());
 						}
+						System.out.println(image.getName());
 						image.delete();
 					}
 				}

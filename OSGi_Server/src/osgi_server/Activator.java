@@ -113,8 +113,8 @@ public class Activator implements BundleActivator {
 	    		if (addr.isLoopbackAddress()) { 
 	    			continue; 
 	    		} 
-	    		if (addr instanceof  Inet4Address) { 
-	    			IPAddr = addr.getHostAddress(); 
+	    		if (addr instanceof  Inet4Address) {
+	    			IPAddr = addr.getHostAddress();
 	    		} 
 	    	} 
 	    } 	
