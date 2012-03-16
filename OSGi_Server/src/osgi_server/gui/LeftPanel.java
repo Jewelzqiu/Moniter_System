@@ -30,6 +30,7 @@ public class LeftPanel extends JPanel {
 		});
 		this.add(List);
 		List.setPreferredSize(new Dimension(170, 478));
+		List.setFont(new Font("Microsoft Yahei", Font.PLAIN, 12));
 	}
 	
 	public void updateData(String[] list) {

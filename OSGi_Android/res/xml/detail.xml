@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <PreferenceCategory android:title="@string/number">
-        <Preference android:key="number"/>
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/time">
-        <Preference android:key="time"/>
-    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/info">
+        <Preference android:key="number" android:title="@string/number"/>
+    <Preference android:key="time" android:title="@string/time"/></PreferenceCategory>
     <PreferenceCategory android:key="image" android:title="@string/image">
     </PreferenceCategory>
 

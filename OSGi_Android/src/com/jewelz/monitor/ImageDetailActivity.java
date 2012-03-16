@@ -1,7 +1,15 @@
 package com.jewelz.monitor;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -48,9 +56,9 @@ public class ImageDetailActivity extends PreferenceActivity {
 				time.substring(12, 14);
 		
 		CameraNo = findPreference("number");
-		CameraNo.setTitle(Number);
+		CameraNo.setSummary(Number);
 		ImageTime = findPreference("time");
-		ImageTime.setTitle(Time);
+		ImageTime.setSummary(Time);
 		
 		Imageview = (ImageView) findViewById(R.id.imageview);
 		Imageview.setVisibility(ImageView.INVISIBLE);
@@ -61,17 +69,52 @@ public class ImageDetailActivity extends PreferenceActivity {
 			
 			public void run() {
 				try {
-					sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					FileInputStream in = ImageDetailActivity.this.openFileInput("settings");
+					InputStreamReader Inreader = new InputStreamReader(in);
+					BufferedReader reader = new BufferedReader(Inreader);
+					String IPAddr = reader.readLine();
+					int port = Integer.parseInt(reader.readLine());
+
+					Socket socket = new Socket(IPAddr, port);
+					DataInputStream ins = new DataInputStream(socket.getInputStream());
+					PrintWriter writer = new PrintWriter(socket.getOutputStream());
+					writer.println(ImageName);
+					writer.flush();
+					
+					DataOutputStream out =
+							new DataOutputStream(
+									new BufferedOutputStream(
+											new FileOutputStream(sd_path + "/" + ImageName)));
+					byte[] buf = new byte[8192];
+					while (true) {
+						int read = 0;
+						if (ins != null) {
+							read = ins.read(buf);
+						}
+						if (read == -1) {
+							break;
+						}
+						out.write(buf, 0, read);
+					}
+					ins.close();
+					writer.close();
+					out.close();
+					socket.close();
+					
+					reader.close();
+					Inreader.close();
+					in.close();
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
-				handler.post(new getImage());
+
+				handler.post(new setImage());
 			}
 			
 		}.start();
 	}
 	
-	class getImage implements Runnable {
+	class setImage implements Runnable {
 
 		public void run() {
 			try {
