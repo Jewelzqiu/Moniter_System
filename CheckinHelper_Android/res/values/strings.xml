@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello</string>
+    <string name="app_name">CheckinHelper</string>
+    <string name="check_in">Check-in/out</string>
+    <string name="train">Train</string>
+    <string name="ok">OK</string>
+    <string name="uit_input">Please input your uid</string>
+    <string name="welcome">Welcome!</string>
+    <string name="sorry">Sorry!</string>
+    <string name="cant_rec">Cannot recognize you!</string>
+    <string name="cancel">Cancel</string>
+    <string name="wait">Please wait...</string>
+    <string name="procing">Processing...</string>
+
+</resources>
