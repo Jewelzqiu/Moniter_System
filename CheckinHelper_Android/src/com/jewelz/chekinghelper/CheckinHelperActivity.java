@@ -36,8 +36,11 @@ import android.widget.ImageView;
 
 public class CheckinHelperActivity extends Activity {
 	
-	static final int CHECK = 0;
-	static final int TRAIN = 1;
+	static final int TRAIN = 0;
+	static final int CHECK = 1;
+	static final int ADD = 1;
+	static final int REMOVE = 2;
+	
 	static int count = 0;
 	
 	final static String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
@@ -48,6 +51,8 @@ public class CheckinHelperActivity extends Activity {
 	
 	Button Check_Btn;
 	Button Train_Btn;
+	Button Add_Btn;
+	Button Remove_Btn;
 	ImageView Captured_Img;	
 	
 	static Handler handler = new Handler();
@@ -70,6 +75,8 @@ public class CheckinHelperActivity extends Activity {
         Check_Btn.setOnClickListener(new OnCheckListener());
         Train_Btn = (Button) findViewById(R.id.train_btn);
         Train_Btn.setOnClickListener(new OnTrainListener());
+        Add_Btn = (Button) findViewById(R.id.add_btn);
+        Remove_Btn = (Button) findViewById(R.id.remove_btn);
         Captured_Img = (ImageView) findViewById(R.id.captured_img);
         setImage();
         
@@ -108,7 +115,7 @@ public class CheckinHelperActivity extends Activity {
 				.setPositiveButton(R.string.train, new DialogInterface.OnClickListener() {
 					
 					public void onClick(DialogInterface dialog, int which) {
-						new UidInputDialog(CheckinHelperActivity.this).show();
+						new UidInputDialog(CheckinHelperActivity.this, TRAIN).show();
 					}
 					
 				}).create();
@@ -183,7 +190,7 @@ public class CheckinHelperActivity extends Activity {
 				}.start();
 				
 			} else if (requestCode == TRAIN) {
-				new UidInputDialog(CheckinHelperActivity.this).show();
+				new UidInputDialog(CheckinHelperActivity.this, TRAIN).show();
 			}
 		}
 	}
@@ -208,6 +215,22 @@ public class CheckinHelperActivity extends Activity {
 			Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imageUri);
 			startActivityForResult(intent, TRAIN);
+		}
+		
+	}
+	
+	class OnAddListener implements OnClickListener {
+		
+		public void onClick(View v) {
+			// TODO
+		}
+		
+	}
+	
+	class OnRemoveListener implements OnClickListener {
+		
+		public void onClick(View v) {
+			// TODO
 		}
 		
 	}

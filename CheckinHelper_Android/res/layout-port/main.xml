@@ -21,17 +21,31 @@
         <Button
 	        android:id="@+id/check_btn"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="match_parent"
 	        android:text="@string/check_in"
 	        android:layout_weight="1" />
 	    
 	    <Button 
 	        android:id="@+id/train_btn"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="match_parent"
 	        android:text="@string/train"
 	        android:layout_weight="1" />
 		    
+	    <Button 
+	        android:id="@+id/add_btn"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:text="@string/add"
+	        android:layout_weight="1" />
+	    
+	    <Button 
+	        android:id="@+id/remove_btn"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:text="@string/remove"
+	        android:layout_weight="1" />
+	    
     </LinearLayout>   
     
 </LinearLayout>
