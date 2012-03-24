@@ -52,12 +52,11 @@ public class MyExample {
 		Photo photo = faceClient.recognize(new File(filename), "all@" + NAMESPACE);
 		for (Face face : photo.getFaces()) {
 			for (Guess guess : face.getGuesses()) {
-				Log.d("debug", guess.first + " " + guess.second);
-				if (list.contains(guess.first)) {
+				if (list.contains(guess.first.substring(0, guess.first.indexOf('@')))) {
 					continue;
 				}
 				if (guess.second > 80) {
-					list.add(guess.first);
+					list.add(guess.first.substring(0, guess.first.indexOf('@')));
 				}
 			}
 		}

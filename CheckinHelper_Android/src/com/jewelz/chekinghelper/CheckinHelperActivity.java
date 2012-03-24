@@ -1,7 +1,16 @@
 package com.jewelz.chekinghelper;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.StringTokenizer;
 
 import com.github.mhendred.face4j.examples.MyExample;
 import com.github.mhendred.face4j.exception.FaceClientException;
@@ -34,6 +43,8 @@ public class CheckinHelperActivity extends Activity {
 	final static String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
 			"/temp/temp.jpg";;
 	static String names = "";
+	
+	static HashMap<String, String> namelist = new HashMap<String, String>();
 	
 	Button Check_Btn;
 	Button Train_Btn;
@@ -103,13 +114,43 @@ public class CheckinHelperActivity extends Activity {
 				}).create();
 		
 		count = 0;
+		
+		new Thread() {
+			
+			public void run() {
+				try {
+					Socket socket = new Socket("192.168.0.215", 33333);
+					BufferedReader reader = new BufferedReader(
+							new InputStreamReader(socket.getInputStream(), "UTF-8"));
+					PrintWriter writer = new PrintWriter(
+							new BufferedOutputStream(socket.getOutputStream()));
+					writer.println("request namelist");
+					writer.flush();
+					String line = reader.readLine();
+					while (line != null) {
+						StringTokenizer tokenizer = new StringTokenizer(line);
+						String uid = tokenizer.nextToken();
+						String name = tokenizer.nextToken();
+						namelist.put(uid, name);
+						line = reader.readLine();
+					}
+					reader.close();
+					writer.close();
+					socket.close();
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}.start();
     }
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		
-		Log.d("debug", requestCode + "");
 		if (RESULT_OK == resultCode) {
 			setImage();
 			
@@ -123,7 +164,9 @@ public class CheckinHelperActivity extends Activity {
 							HashSet<String> list = FaceRec.recognize(path);
 							names = "";
 							for (String uid : list) {
-								names += uid + " ";
+								if (namelist.containsKey(uid)) {
+									names += namelist.get(uid) + " ";
+								}
 							}
 							if (names.equals("")) {
 								handler.post(new ShowSorry());
@@ -192,6 +235,7 @@ public class CheckinHelperActivity extends Activity {
 	static class ShowSorry implements Runnable {
 
 		public void run() {
+			names = "";
 			CheckinHelperActivity.count++;
 			if (CheckinHelperActivity.count >= 3) {
 				// TODO 
@@ -212,6 +256,10 @@ public class CheckinHelperActivity extends Activity {
 		new Thread() {
 			
 			public void run() {
+				if (!namelist.containsKey(uid)) {
+					handler.post(new ShowSorry());
+					return;
+				}
 				boolean success = false;
 				handler.post(new ShowWait());
 				try {
@@ -226,13 +274,13 @@ public class CheckinHelperActivity extends Activity {
 				}
 				
 				if (success) {
-					names = uid;
-					// TODO get name
-					handler.post(new ShowWelcome());
-				} else {
-					names = "";
-					handler.post(new ShowSorry());
+					if (namelist.containsKey(uid)) {
+						names = namelist.get(uid);
+						handler.post(new ShowWelcome());
+					}
 				}
+				
+				handler.post(new ShowSorry());				
 			}
 			
 		}.start();
