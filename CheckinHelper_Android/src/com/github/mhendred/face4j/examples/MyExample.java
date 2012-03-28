@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import android.util.Log;
-
 import com.github.mhendred.face4j.DefaultFaceClient;
 import com.github.mhendred.face4j.FaceClient;
 import com.github.mhendred.face4j.exception.FaceClientException;
@@ -33,7 +31,6 @@ public class MyExample {
 		Photo photo = faceClient.detect(new File(filename));
 		Face f = photo.getFace();
     	faceClient.saveTags(f.getTID(), uid, label);
-    	Log.d("debug", "start train");
     	TrainResponse response = faceClient.train(uid);
     	List<UserStatus> updated = response.getUpdated();
     	Iterator<UserStatus> iterator = updated.iterator();
@@ -52,6 +49,7 @@ public class MyExample {
 		Photo photo = faceClient.recognize(new File(filename), "all@" + NAMESPACE);
 		for (Face face : photo.getFaces()) {
 			for (Guess guess : face.getGuesses()) {
+				System.out.println(guess);
 				if (list.contains(guess.first.substring(0, guess.first.indexOf('@')))) {
 					continue;
 				}

@@ -1,7 +1,8 @@
-﻿CREATE TABLE MEMBER_NAME
+﻿CREATE TABLE radlab
 (
-cdate	data(yymmdd),
+cdate	date(yymmdd),
+name	varchar(20),
 in		varchar(8),
 out		varchar(8) DEFAULT '00:00:00',
-PRIMARY KEY (cdate)
+PRIMARY KEY (cdate, name)
 )

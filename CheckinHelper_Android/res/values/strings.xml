@@ -18,5 +18,6 @@
     <string name="id">ID</string>
     <string name="name">Name</string>
     <string name="code">Code</string>
+    <string name="code_err">Wrong code!</string>
 
 </resources>

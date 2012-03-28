@@ -12,15 +12,20 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class CheckinServer {
-	
+
 	final static String NAMELIST_FILE_NAME = "namelist";
 	HashMap<String, String> NameList = new HashMap<String, String>();
 	ServerSocket server;
 	Thread ServerThread;
+
+	static DB database = new DB();
 	
 	public void start() {
 		BufferedReader reader;
@@ -30,45 +35,45 @@ public class CheckinServer {
 			while (line != null) {
 				line = new String(line.getBytes(), "UTF-8");
 				StringTokenizer tokenizer = new StringTokenizer(line);
-				NameList.put(tokenizer.nextToken(), tokenizer.nextToken());			
+				NameList.put(tokenizer.nextToken(), tokenizer.nextToken());
 				line = reader.readLine();
 			}
 			reader.close();
 			server = new ServerSocket(33333);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-//			File file = new File(NAMELIST_FILE_NAME);
-//			try {
-//				file.createNewFile();
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
+			// File file = new File(NAMELIST_FILE_NAME);
+			// try {
+			// file.createNewFile();
+			// } catch (IOException e1) {
+			// e1.printStackTrace();
+			// }
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		ServerThread = new Thread(new ServerRunnable());
 		ServerThread.start();
 	}
-	
+
 	public void addMember(String uid, String name) {
 		NameList.put(uid, name);
 	}
-	
+
 	public String removeMember(String uid) {
 		return NameList.remove(uid);
 	}
-	
+
 	public void stop() throws IOException {
 		ServerThread.interrupt();
-		PrintWriter writer = new PrintWriter(
-				new BufferedWriter(new FileWriter(NAMELIST_FILE_NAME)));
+		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(
+				NAMELIST_FILE_NAME)));
 		for (String uid : NameList.keySet()) {
 			writer.println(uid + " " + NameList.get(uid));
 		}
 		writer.close();
 	}
-	
+
 	class ServerRunnable implements Runnable {
 
 		@Override
@@ -77,33 +82,37 @@ public class CheckinServer {
 				try {
 					Socket socket = server.accept();
 					BufferedReader reader = new BufferedReader(
-							new InputStreamReader(socket.getInputStream()));
+							new InputStreamReader(socket.getInputStream(),
+									"UTF-8"));
 					PrintWriter writer = new PrintWriter(
-							new OutputStreamWriter(
-									new BufferedOutputStream(
-											socket.getOutputStream()), "UTF-8"));
-					StringTokenizer line = new StringTokenizer(reader.readLine());
-					String command = line.nextToken();
-					String data = line.nextToken();
-					
+							new OutputStreamWriter(new BufferedOutputStream(
+									socket.getOutputStream()), "UTF-8"));
+					String line = reader.readLine();
+					System.out.println(line);
+					StringTokenizer tokenizer = new StringTokenizer(line);
+					String command = tokenizer.nextToken();
+					String data = tokenizer.nextToken();
 					if (command.equals("request")) {
-						if (data.equals("namelist")) {
-							for (String uid : NameList.keySet()) {
-								writer.println(uid + " " + NameList.get(uid));
-							}							
-						} else if (data.equals("")) {
-							// TODO
+						writer.println(MD5("radlab"));
+						for (String uid : NameList.keySet()) {
+							writer.println(uid + " " + NameList.get(uid));
 						}
 					} else if (command.equals("check")) {
-						// TODO
-//						System.out.println(NameList.get(data) + " just checked in!");
-//						System.out.println(NameList.get(data) + " just checked out!");
-					} else if (command.equals("addmember")) {
-						String name = line.nextToken();
+						System.out.println("checked in at "
+								+ new Date(Long.parseLong(data)));
+						ArrayList<String> names = new ArrayList<String>();
+						while (tokenizer.hasMoreTokens()) {
+							names.add(tokenizer.nextToken());
+						}
+						database.checkIn(Long.parseLong(data), names);
+						System.out.println(names);
+					} else if (command.equals("add")) {
+						String name = tokenizer.nextToken();
 						addMember(data, name);
 						System.out.println("added a new member: " + name);
-					} else if (command.equals("removemember")) {
-						System.out.println("removed a member: " + removeMember(data));
+					} else if (command.equals("remove")) {
+						System.out.println("removed a member: "
+								+ removeMember(data));
 					}
 					writer.flush();
 					writer.close();
@@ -112,10 +121,10 @@ public class CheckinServer {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -126,12 +135,41 @@ public class CheckinServer {
 
 	/**
 	 * @param args
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
 		CheckinServer server = new CheckinServer();
 		server.start();
-		//server.stop();
+		// server.stop();
+	}
+
+	public static String MD5(String inStr) {
+		MessageDigest md5 = null;
+		try {
+			md5 = MessageDigest.getInstance("MD5");
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			e.printStackTrace();
+			return "";
+		}
+		char[] charArray = inStr.toCharArray();
+		byte[] byteArray = new byte[charArray.length];
+
+		for (int i = 0; i < charArray.length; i++)
+			byteArray[i] = (byte) charArray[i];
+
+		byte[] md5Bytes = md5.digest(byteArray);
+
+		StringBuffer hexValue = new StringBuffer();
+
+		for (int i = 0; i < md5Bytes.length; i++) {
+			int val = ((int) md5Bytes[i]) & 0xff;
+			if (val < 16)
+				hexValue.append("0");
+			hexValue.append(Integer.toHexString(val));
+		}
+
+		return hexValue.toString();
 	}
 
 }
