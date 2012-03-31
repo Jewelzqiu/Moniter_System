@@ -11,13 +11,18 @@
     <string name="sorry">Sorry!</string>
     <string name="cant_rec">Cannot recognize you!</string>
     <string name="cancel">Cancel</string>
-    <string name="wait">Please wait...</string>
-    <string name="procing">Processing...</string>
+    <string name="wait">Please wait&#8230;</string>
+    <string name="procing">Processing&#8230;</string>
     <string name="add">Add</string>
     <string name="remove">Remove</string>
     <string name="id">ID</string>
     <string name="name">Name</string>
     <string name="code">Code</string>
     <string name="code_err">Wrong code!</string>
+    <string name="settings">Settings</string>
+    <string name="view">View Data</string>
+    <string name="desc">Captured Image</string>
+    <string name="ip">Server IP address</string>
+    <string name="port">Server port</string>
 
 </resources>

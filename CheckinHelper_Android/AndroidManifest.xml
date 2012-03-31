@@ -4,7 +4,11 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="13" />
+    
+    <supports-screens android:requiresSmallestWidthDp="320"
+            android:compatibleWidthLimitDp="480" />
+    
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -14,8 +18,7 @@
         android:label="@string/app_name" >
         <activity
             android:label="@string/app_name"
-            android:name=".CheckinHelperActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:name=".MainActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 

@@ -38,8 +38,8 @@ public class UidInputDialog extends Dialog {
 		CodeText = (EditText) findViewById(R.id.code);
 		NameView = (TextView) findViewById(R.id.name_text);
 
-		if (which == CheckinHelperActivity.TRAIN
-				|| which == CheckinHelperActivity.REMOVE) {
+		if (which == CheckInFragment.TRAIN
+				|| which == CheckInFragment.REMOVE) {
 			NameText.setEnabled(false);
 			NameView.setEnabled(false);
 		}
@@ -50,24 +50,24 @@ public class UidInputDialog extends Dialog {
 			public void onClick(View v) {
 				String uid = UidText.getText().toString();
 				String code = MD5(CodeText.getText().toString());
-				Log.d("debug", "code:  " + CheckinHelperActivity.CODE);
+				Log.d("debug", "code:  " + CheckInFragment.CODE);
 				Log.d("debug", "input: " + code);
 
-				if (!code.equals(CheckinHelperActivity.CODE)) {
-					CheckinHelperActivity.CodeErrorDialog.show();
+				if (!code.equals(CheckInFragment.CODE)) {
+					CheckInFragment.CodeErrorDialog.show();
 					return;
 				}
 
 				switch (which) {
-				case CheckinHelperActivity.TRAIN:
-					CheckinHelperActivity.train(uid);
+				case CheckInFragment.TRAIN:
+					CheckInFragment.train(uid);
 					break;
-				case CheckinHelperActivity.ADD:
+				case CheckInFragment.ADD:
 					String name = NameText.getText().toString();
-					CheckinHelperActivity.addMember(uid, name);
+					CheckInFragment.addMember(uid, name);
 					break;
-				case CheckinHelperActivity.REMOVE:
-					CheckinHelperActivity.removeMember(uid);
+				case CheckInFragment.REMOVE:
+					CheckInFragment.removeMember(uid);
 					break;
 				}
 				dismiss();
