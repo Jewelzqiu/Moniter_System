@@ -49,8 +49,8 @@ public class DB {
 							+ name + "'");
 				} else {
 					statement.execute("insert into radlab (cdate,name,intime)"
-							+ " values('" + cdate + "','" + name + "','"
-							+ time + "')");
+							+ " values('" + cdate + "','" + name + "','" + time
+							+ "')");
 				}
 
 				result = statement.executeQuery("select * from radlab");
@@ -74,11 +74,39 @@ public class DB {
 		}
 	}
 
-	public static void main(String[] args) {
-		DB db = new DB();
-		ArrayList<String> names = new ArrayList<String>();
-		names.add("qiu");
-		db.checkIn(System.currentTimeMillis(), names);
+	public String query(String query) {
+		String result = "";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connection = java.sql.DriverManager.getConnection(url);
+			statement = connection.createStatement();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			ResultSet resultset = statement.executeQuery(query);
+			while (resultset.next()) {
+				result += resultset.getString("cdate") + " "
+						+ resultset.getString("name") + " "
+						+ resultset.getString("intime") + " "
+						+ resultset.getString("outtime") + "\n";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
+
+	// public static void main(String[] args) {
+	// DB db = new DB();
+	// ArrayList<String> names = new ArrayList<String>();
+	// names.add("qiu");
+	// db.checkIn(System.currentTimeMillis(), names);
+	// }
 
 }

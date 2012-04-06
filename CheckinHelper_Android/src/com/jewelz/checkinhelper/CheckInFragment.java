@@ -238,7 +238,7 @@ public class CheckInFragment extends Fragment {
 
 		public boolean onMenuItemClick(MenuItem item) {
 			System.out.println(item.getTitle());
-			new UidInputDialog(getActivity(), ADD);
+			new UidInputDialog(getActivity(), ADD).show();
 			return false;
 		}
 
@@ -248,7 +248,7 @@ public class CheckInFragment extends Fragment {
 
 		public boolean onMenuItemClick(MenuItem item) {
 			System.out.println(item.getTitle());
-			new UidInputDialog(getActivity(), REMOVE);
+			new UidInputDialog(getActivity(), REMOVE).show();
 			return false;
 		}
 
@@ -342,6 +342,7 @@ public class CheckInFragment extends Fragment {
 					String line = reader.readLine();
 					namelist.clear();
 					while (line != null) {
+						System.out.println(line);
 						StringTokenizer tokenizer = new StringTokenizer(line);
 						String uid = tokenizer.nextToken();
 						String name = tokenizer.nextToken();

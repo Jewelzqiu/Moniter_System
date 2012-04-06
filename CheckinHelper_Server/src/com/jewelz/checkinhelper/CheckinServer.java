@@ -26,7 +26,7 @@ public class CheckinServer {
 	Thread ServerThread;
 
 	static DB database = new DB();
-	
+
 	public void start() {
 		BufferedReader reader;
 		try {
@@ -58,20 +58,30 @@ public class CheckinServer {
 
 	public void addMember(String uid, String name) {
 		NameList.put(uid, name);
+		writeBack();
 	}
 
 	public String removeMember(String uid) {
+		writeBack();
 		return NameList.remove(uid);
 	}
 
 	public void stop() throws IOException {
 		ServerThread.interrupt();
-		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(
-				NAMELIST_FILE_NAME)));
-		for (String uid : NameList.keySet()) {
-			writer.println(uid + " " + NameList.get(uid));
+		writeBack();
+	}
+
+	void writeBack() {
+		try {
+			PrintWriter writer = new PrintWriter(new BufferedWriter(
+					new FileWriter(NAMELIST_FILE_NAME)));
+			for (String uid : NameList.keySet()) {
+				writer.println(uid + " " + NameList.get(uid));
+			}
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		writer.close();
 	}
 
 	class ServerRunnable implements Runnable {
@@ -113,6 +123,10 @@ public class CheckinServer {
 					} else if (command.equals("remove")) {
 						System.out.println("removed a member: "
 								+ removeMember(data));
+					} else if (command.toLowerCase().equals("select")) {
+						String result = database.query(line);
+						System.out.print(result);
+						writer.print(result);
 					}
 					writer.flush();
 					writer.close();

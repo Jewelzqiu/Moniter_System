@@ -18,7 +18,8 @@
         android:id="@+id/uid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dip" />
+        android:layout_marginBottom="10dip"
+        android:inputType="textShortMessage" />
 
     <TextView 
         android:id="@+id/name_text"
@@ -33,7 +34,8 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dip" />   
+        android:layout_marginBottom="10dip"
+        android:inputType="text" />   
 
     <TextView 
         android:layout_width="wrap_content"
@@ -48,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dip"
-        android:password="true" />
+        android:inputType="textPassword" />
         
     <Button
         android:id="@+id/uid_ok"

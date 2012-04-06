@@ -24,5 +24,8 @@
     <string name="desc">Captured Image</string>
     <string name="ip">Server IP address</string>
     <string name="port">Server port</string>
+    <string name="refresh">Refresh</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 
 </resources>
