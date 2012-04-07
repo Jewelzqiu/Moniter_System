@@ -10,6 +10,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
@@ -53,6 +55,9 @@ public class CheckInFragment extends Fragment {
 	static String uids = "";
 
 	static HashMap<String, String> namelist = new HashMap<String, String>();
+	HashSet<String> checkined = new HashSet<String>();
+	HashSet<String> present = new HashSet<String>();
+	static int tempdate; 
 
 	static ImageView Captured_Img;
 
@@ -74,6 +79,7 @@ public class CheckInFragment extends Fragment {
 		setHasOptionsMenu(true);
 		
 		updateNamelist();
+		tempdate = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
 	}
 
 	@Override

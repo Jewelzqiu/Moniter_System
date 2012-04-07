@@ -24,7 +24,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 public class ViewFragment extends PreferenceFragment {
 
 	static final String TABLE_NAME = "radlab";
-	
+
 	Handler handler = new Handler();
 
 	@Override
@@ -33,6 +33,8 @@ public class ViewFragment extends PreferenceFragment {
 
 		addPreferencesFromResource(R.xml.view);
 		setHasOptionsMenu(true);
+		new Thread(new GetData("select * from radlab order by cdate DESC"))
+				.start();
 	}
 
 	@Override
@@ -51,7 +53,8 @@ public class ViewFragment extends PreferenceFragment {
 	class OnFreshListener implements OnMenuItemClickListener {
 
 		public boolean onMenuItemClick(MenuItem item) {
-			new Thread(new GetData("select * from radlab")).start();
+			new Thread(new GetData("select * from radlab order by cdate DESC"))
+					.start();
 			return false;
 		}
 
@@ -95,27 +98,27 @@ public class ViewFragment extends PreferenceFragment {
 				String name = tokenizer.nextToken();
 				String time = tokenizer.nextToken() + " - "
 						+ tokenizer.nextToken();
-				PreferenceCategory category = 
-						(PreferenceCategory) getPreferenceScreen()
+				PreferenceCategory category = (PreferenceCategory) getPreferenceScreen()
 						.findPreference(date);
 				if (category == null) {
 					category = new PreferenceCategory(getActivity());
 					category.setKey(date);
 					category.setTitle(date);
+					getPreferenceScreen().addPreference(category);
 				}
 				Preference item = new Preference(getActivity());
-				item.setTitle(name);
+				item.setTitle(CheckInFragment.namelist.get(name));
 				item.setSummary(time);
 				category.addPreference(item);
 			}
 		}
 
 	}
-	
+
 	public class GetData implements Runnable {
-		
+
 		String query;
-		
+
 		public GetData(String query) {
 			this.query = query;
 		}
@@ -125,11 +128,10 @@ public class ViewFragment extends PreferenceFragment {
 				Socket socket = new Socket(MainActivity.SERVER_IP,
 						MainActivity.SERVER_PORT);
 				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(socket.getInputStream(),
-								"UTF-8"));
-				PrintWriter writer = new PrintWriter(
-						new OutputStreamWriter(new BufferedOutputStream(
-								socket.getOutputStream()), "UTF-8"));
+						new InputStreamReader(socket.getInputStream(), "UTF-8"));
+				PrintWriter writer = new PrintWriter(new OutputStreamWriter(
+						new BufferedOutputStream(socket.getOutputStream()),
+						"UTF-8"));
 
 				writer.println(this.query);
 				writer.flush();
@@ -150,9 +152,9 @@ public class ViewFragment extends PreferenceFragment {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		
+
 		}
-		
+
 	}
 
 }
