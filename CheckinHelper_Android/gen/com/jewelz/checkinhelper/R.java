@@ -22,21 +22,31 @@ public final class R {
     }
     public static final class id {
         public static final int captured_img=0x7f060000;
-        public static final int code=0x7f060006;
-        public static final int name=0x7f060005;
-        public static final int name_text=0x7f060004;
-        public static final int pager=0x7f060002;
+        public static final int code=0x7f06000f;
+        public static final int first_row=0x7f060003;
+        public static final int friday=0x7f060008;
+        public static final int monday=0x7f060004;
+        public static final int name=0x7f06000e;
+        public static final int name_text=0x7f06000d;
+        public static final int pager=0x7f06000b;
+        public static final int saturday=0x7f060009;
+        public static final int sunday=0x7f06000a;
+        public static final int table=0x7f060002;
         public static final int text=0x7f060001;
-        public static final int uid=0x7f060003;
-        public static final int uid_ok=0x7f060007;
-        public static final int view_text=0x7f060008;
+        public static final int thursday=0x7f060007;
+        public static final int tuesday=0x7f060005;
+        public static final int uid=0x7f06000c;
+        public static final int uid_ok=0x7f060010;
+        public static final int view_text=0x7f060011;
+        public static final int wednesday=0x7f060006;
     }
     public static final class layout {
         public static final int checkin=0x7f030000;
         public static final int hello_world=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int uid_input=0x7f030003;
-        public static final int view=0x7f030004;
+        public static final int history=0x7f030002;
+        public static final int main=0x7f030003;
+        public static final int uid_input=0x7f030004;
+        public static final int view=0x7f030005;
     }
     public static final class string {
         public static final int add=0x7f05000c;

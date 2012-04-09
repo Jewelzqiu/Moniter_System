@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
@@ -78,7 +77,11 @@ public class CheckInFragment extends Fragment {
 
 		setHasOptionsMenu(true);
 		
-		updateNamelist();
+		try {
+			updateNamelist();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		tempdate = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
 	}
 

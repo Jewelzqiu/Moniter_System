@@ -1,5 +1,6 @@
 package com.jewelz.checkinhelper;
 
+import java.io.File;
 import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -16,6 +17,8 @@ import android.support.v4.view.ViewPager;
 
 public class MainActivity extends Activity {
 
+	static final String folder = Environment.getExternalStorageDirectory()
+			.getAbsolutePath() + "/temp";
 	static final String path = Environment.getExternalStorageDirectory()
 			.getAbsolutePath() + "/temp/temp.jpg";
 	static final String path_ori = Environment.getExternalStorageDirectory()
@@ -44,7 +47,7 @@ public class MainActivity extends Activity {
 		prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		SERVER_IP = prefs.getString("ip_p", "none");
-		SERVER_PORT = Integer.parseInt(prefs.getString("port_p", "-1"));
+		SERVER_PORT = Integer.parseInt(prefs.getString("port_p", "33333"));
 
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
 		mTabsAdapter.addTab(bar.newTab().setText(R.string.check_in),
@@ -56,6 +59,11 @@ public class MainActivity extends Activity {
 
 		if (savedInstanceState != null) {
 			bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+		}
+		
+		File Folder = new File(folder);
+		if ((!Folder.exists()) || (!Folder.isDirectory())) {
+			System.out.println(Folder.mkdir());
 		}
 	}
 

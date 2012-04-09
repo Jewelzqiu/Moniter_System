@@ -8,33 +8,60 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.StringTokenizer;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
-public class ViewFragment extends PreferenceFragment {
+public class HistoryFragment extends Fragment {
 
-	static final String TABLE_NAME = "radlab";
+	static String[] dates = new String[7];
+	TextView[] texts = new TextView[7];
 
 	Handler handler = new Handler();
+	TableLayout table;
+	TableRow firstrow;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		addPreferencesFromResource(R.xml.view);
 		setHasOptionsMenu(true);
-		new Thread(new GetData("select * from radlab order by cdate DESC"))
-				.start();
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.history, container, false);
+		texts[0] = (TextView) v.findViewById(R.id.monday);
+		texts[1] = (TextView) v.findViewById(R.id.tuesday);
+		texts[2] = (TextView) v.findViewById(R.id.wednesday);
+		texts[3] = (TextView) v.findViewById(R.id.thursday);
+		texts[4] = (TextView) v.findViewById(R.id.friday);
+		texts[5] = (TextView) v.findViewById(R.id.saturday);
+		texts[6] = (TextView) v.findViewById(R.id.sunday);
+		setDates(System.currentTimeMillis());
+
+		table = (TableLayout) v.findViewById(R.id.table);
+		firstrow = (TableRow) v.findViewById(R.id.first_row);
+		
+		return v;
 	}
 
 	@Override
@@ -53,8 +80,9 @@ public class ViewFragment extends PreferenceFragment {
 	class OnRefreshListener implements OnMenuItemClickListener {
 
 		public boolean onMenuItemClick(MenuItem item) {
-			new Thread(new GetData("select * from radlab order by cdate DESC"))
-					.start();
+			// new Thread(new
+			// GetData("select * from radlab order by cdate DESC"))
+			// .start();
 			return false;
 		}
 
@@ -87,37 +115,60 @@ public class ViewFragment extends PreferenceFragment {
 		}
 
 		public void run() {
-			getPreferenceScreen().removeAll();
-			if (data.size() == 0) {
-				return;
-			}
-
+			table.removeAllViews();
+			setDates(System.currentTimeMillis());
+			table.addView(firstrow);
+			
 			for (String line : data) {
 				StringTokenizer tokenizer = new StringTokenizer(line);
 				String date = tokenizer.nextToken();
 				String name = tokenizer.nextToken();
 				String time = tokenizer.nextToken() + " - "
 						+ tokenizer.nextToken();
-				PreferenceCategory category = (PreferenceCategory) getPreferenceScreen()
-						.findPreference(date);
-				if (category == null) {
-					category = new PreferenceCategory(getActivity());
-					category.setKey(date);
-					category.setTitle(date);
-					getPreferenceScreen().addPreference(category);
-				}
-				Preference item = new Preference(getActivity());
-				String Name = CheckInFragment.namelist.get(name);
-				if (Name != null) {
-					int length = Name.length();
-					for (int i = 0; i < 5 - length; i++) {
-						Name += "\t";
+				
+				int found = -1;
+				for (int i = 0; i < 7; i++) {
+					if (date.equals(texts[i].getText().toString())) {
+						found = i;
+						break;
 					}
-					Name += time;
-					item.setTitle(Name);
-					category.addPreference(item);
+				}
+				
+				if (found > -1) {
+					
 				}
 			}
+//			getPreferenceScreen().removeAll();
+//			if (data.size() == 0) {
+//				return;
+//			}
+//
+//			for (String line : data) {
+//				StringTokenizer tokenizer = new StringTokenizer(line);
+//				String date = tokenizer.nextToken();
+//				String name = tokenizer.nextToken();
+//				String time = tokenizer.nextToken() + " - "
+//						+ tokenizer.nextToken();
+//				PreferenceCategory category = (PreferenceCategory) getPreferenceScreen()
+//						.findPreference(date);
+//				if (category == null) {
+//					category = new PreferenceCategory(getActivity());
+//					category.setKey(date);
+//					category.setTitle(date);
+//					getPreferenceScreen().addPreference(category);
+//				}
+//				Preference item = new Preference(getActivity());
+//				String Name = CheckInFragment.namelist.get(name);
+//				if (Name != null) {
+//					int length = Name.length();
+//					for (int i = 0; i < 5 - length; i++) {
+//						Name += "\t";
+//					}
+//					Name += time;
+//					item.setTitle(Name);
+//					category.addPreference(item);
+//				}
+//			}
 		}
 
 	}
@@ -153,7 +204,6 @@ public class ViewFragment extends PreferenceFragment {
 				reader.close();
 				writer.close();
 				socket.close();
-				CheckInFragment.updateNamelist();
 				handler.post(new SetData(data));
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
@@ -167,4 +217,20 @@ public class ViewFragment extends PreferenceFragment {
 
 	}
 
+	void setDates(long time) {
+		Calendar calendar = Calendar.getInstance();
+		int today = calendar.get(Calendar.DAY_OF_WEEK);
+		int offset = today - Calendar.MONDAY;
+		int temp = 0;
+		while (temp < 7) {
+			Date date = new Date(time - offset * 24 * 60 * 60 * 1000);
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			dates[temp] = df.format(date);
+			texts[0].setText(dates[temp]);
+			temp++;
+			offset--;
+		}
+		new Thread(new GetData("select * from radlab order by cdate DESC"))
+				.start();
+	}
 }

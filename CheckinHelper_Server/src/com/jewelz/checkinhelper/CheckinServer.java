@@ -2,10 +2,10 @@ package com.jewelz.checkinhelper;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -34,6 +34,7 @@ public class CheckinServer {
 			String line = reader.readLine();
 			while (line != null) {
 				line = new String(line.getBytes(), "UTF-8");
+				System.out.println(line);
 				StringTokenizer tokenizer = new StringTokenizer(line);
 				NameList.put(tokenizer.nextToken(), tokenizer.nextToken());
 				line = reader.readLine();
@@ -42,12 +43,12 @@ public class CheckinServer {
 			server = new ServerSocket(33333);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			// File file = new File(NAMELIST_FILE_NAME);
-			// try {
-			// file.createNewFile();
-			// } catch (IOException e1) {
-			// e1.printStackTrace();
-			// }
+			File file = new File(NAMELIST_FILE_NAME);
+			try {
+				file.createNewFile();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -62,8 +63,9 @@ public class CheckinServer {
 	}
 
 	public String removeMember(String uid) {
+		String name = NameList.remove(uid);
 		writeBack();
-		return NameList.remove(uid);
+		return name;
 	}
 
 	public void stop() throws IOException {
@@ -73,10 +75,12 @@ public class CheckinServer {
 
 	void writeBack() {
 		try {
-			PrintWriter writer = new PrintWriter(new BufferedWriter(
-					new FileWriter(NAMELIST_FILE_NAME)));
+			PrintWriter writer = new PrintWriter(new OutputStreamWriter(
+					new BufferedOutputStream(new FileOutputStream(
+							NAMELIST_FILE_NAME)), "UTF-8"));
 			for (String uid : NameList.keySet()) {
 				writer.println(uid + " " + NameList.get(uid));
+				System.out.println("wb: " + uid + " " + NameList.get(uid));
 			}
 			writer.close();
 		} catch (IOException e) {
@@ -106,6 +110,7 @@ public class CheckinServer {
 						writer.println(MD5("radlab"));
 						for (String uid : NameList.keySet()) {
 							writer.println(uid + " " + NameList.get(uid));
+							//System.out.println(uid + " " + NameList.get(uid));
 						}
 					} else if (command.equals("check")) {
 						System.out.println("checked in at "
