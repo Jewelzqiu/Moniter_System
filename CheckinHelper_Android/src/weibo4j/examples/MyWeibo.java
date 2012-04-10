@@ -29,7 +29,7 @@ public class MyWeibo {
 			weibo.setToken("37c99e4670202a3cccc2e3e5865d16d4",
 					"0232fab516389c7929f35afe78beadc2");
 
-			Status status = weibo.updateStatus(mystatus);
+			Status status = weibo.updateStatus(mystatus, 31.018883, 121.430812);
 			System.out.println("Successfully updated the status to ["
 					+ status.getText() + "].");
 
@@ -56,12 +56,9 @@ public class MyWeibo {
 					"0232fab516389c7929f35afe78beadc2");
 
 			try {
-//				byte[] content = readFileImage(Filename);
-//				System.out.println("content length:" + content.length);
-//				ImageItem pic = new ImageItem("pic", content);
-
 				String s = java.net.URLEncoder.encode(mystatus, "utf-8");
-				Status status = weibo.uploadStatus(s, new File(Filename));
+				Status status = weibo.uploadStatus(s, new File(Filename),
+						31.018883, 121.430812);
 
 				System.out.println("Successfully upload the status to ["
 						+ status.getText() + status.getOriginal_pic() + "].");
@@ -86,9 +83,5 @@ public class MyWeibo {
 		bufferedInputStream.close();
 		return bytes;
 	}
-
-	public static void main(String[] args) {
-		MyWeibo.upload("sdkfjlaskdl", "party.jpg");
-	}
-
+	
 }

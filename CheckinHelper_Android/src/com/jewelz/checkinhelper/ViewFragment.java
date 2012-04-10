@@ -98,7 +98,8 @@ public class ViewFragment extends PreferenceFragment {
 				String name = tokenizer.nextToken();
 				String time = tokenizer.nextToken() + " - "
 						+ tokenizer.nextToken();
-				PreferenceCategory category = (PreferenceCategory) getPreferenceScreen()
+				PreferenceCategory category =
+						(PreferenceCategory) getPreferenceScreen()
 						.findPreference(date);
 				if (category == null) {
 					category = new PreferenceCategory(getActivity());
