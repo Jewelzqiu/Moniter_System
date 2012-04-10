@@ -2,10 +2,11 @@ package com.jewelz.checkinhelper;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -30,10 +31,11 @@ public class CheckinServer {
 	public void start() {
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader(new FileReader(NAMELIST_FILE_NAME));
+			InputStreamReader isr = new InputStreamReader(new FileInputStream(
+					NAMELIST_FILE_NAME), "UTF-8");
+			reader = new BufferedReader(isr);
 			String line = reader.readLine();
 			while (line != null) {
-				line = new String(line.getBytes(), "UTF-8");
 				System.out.println(line);
 				StringTokenizer tokenizer = new StringTokenizer(line);
 				NameList.put(tokenizer.nextToken(), tokenizer.nextToken());
@@ -75,9 +77,10 @@ public class CheckinServer {
 
 	void writeBack() {
 		try {
-			PrintWriter writer = new PrintWriter(new OutputStreamWriter(
-					new BufferedOutputStream(new FileOutputStream(
-							NAMELIST_FILE_NAME)), "UTF-8"));
+			OutputStreamWriter osw = new OutputStreamWriter(
+					new FileOutputStream(NAMELIST_FILE_NAME), "UTF-8");
+			BufferedWriter bw = new BufferedWriter(osw);
+			PrintWriter writer = new PrintWriter(bw);
 			for (String uid : NameList.keySet()) {
 				writer.println(uid + " " + NameList.get(uid));
 				System.out.println("wb: " + uid + " " + NameList.get(uid));
@@ -110,7 +113,6 @@ public class CheckinServer {
 						writer.println(MD5("radlab"));
 						for (String uid : NameList.keySet()) {
 							writer.println(uid + " " + NameList.get(uid));
-							//System.out.println(uid + " " + NameList.get(uid));
 						}
 					} else if (command.equals("check")) {
 						System.out.println("checked in at "
@@ -119,7 +121,9 @@ public class CheckinServer {
 						while (tokenizer.hasMoreTokens()) {
 							names.add(tokenizer.nextToken());
 						}
-						database.checkIn(Long.parseLong(data), names);
+						String result = database.checkIn(Long.parseLong(data),
+								names);
+						writer.println(result);
 						System.out.println(names);
 					} else if (command.equals("add")) {
 						String name = tokenizer.nextToken();

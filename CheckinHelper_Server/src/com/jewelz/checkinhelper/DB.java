@@ -17,8 +17,11 @@ public class DB {
 	Connection connection;
 	Statement statement;
 
-	public void checkIn(long militime, ArrayList<String> names) {
+	public String checkIn(long militime, ArrayList<String> names) {
 
+		String inlist = "";
+		String outlist = "";
+		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = java.sql.DriverManager.getConnection(url);
@@ -39,6 +42,7 @@ public class DB {
 						.executeQuery("select * from radlab where cdate='"
 								+ cdate + "' and name='" + name + "'");
 				if (result.next()) {
+					outlist += name + " ";
 					System.out.println(result.getString("cdate") + "\t"
 							+ result.getString("name") + "\t"
 							+ result.getString("intime") + "\t"
@@ -48,6 +52,7 @@ public class DB {
 							+ time + "' where cdate='" + cdate + "' and name='"
 							+ name + "'");
 				} else {
+					inlist += name + " ";
 					statement.execute("insert into radlab (cdate,name,intime)"
 							+ " values('" + cdate + "','" + name + "','" + time
 							+ "')");
@@ -72,6 +77,8 @@ public class DB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		return inlist + "\n" + outlist;
 	}
 
 	public String query(String query) {

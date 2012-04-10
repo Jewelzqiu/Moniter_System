@@ -54,8 +54,7 @@ public class CheckInFragment extends Fragment {
 	static String uids = "";
 
 	static HashMap<String, String> namelist = new HashMap<String, String>();
-	HashSet<String> checkined = new HashSet<String>();
-	HashSet<String> present = new HashSet<String>();
+	static HashSet<String> present = new HashSet<String>();
 	static int tempdate; 
 
 	static ImageView Captured_Img;
@@ -286,6 +285,9 @@ public class CheckInFragment extends Fragment {
 					try {
 						Socket socket = new Socket(MainActivity.SERVER_IP,
 								MainActivity.SERVER_PORT);
+						BufferedReader reader = new BufferedReader(
+								new InputStreamReader(socket.getInputStream(),
+										"UTF-8"));
 						PrintWriter writer = new PrintWriter(
 								new OutputStreamWriter(
 										new BufferedOutputStream(
@@ -295,8 +297,51 @@ public class CheckInFragment extends Fragment {
 						writer.println("check " + System.currentTimeMillis()
 								+ " " + uids);
 						writer.flush();
+						String inlist = reader.readLine();
+						String outlist = reader.readLine();
+						reader.close();
 						writer.close();
 						socket.close();
+						
+						String msg = "";
+						StringTokenizer st = new StringTokenizer(inlist);
+						if (st.hasMoreTokens()) {
+							while (st.hasMoreTokens()) {
+								String name = st.nextToken();
+								if (namelist.containsKey(name)) {
+									System.out.print(namelist.get(name) + " ");
+									msg += namelist.get(name) + " ";
+									present.add(name);
+								}
+							}
+							System.out.println("just checked in!");
+							msg += "just checkin in! ";
+						}					
+						
+						st = new StringTokenizer(outlist);
+						if (st.hasMoreTokens()) {
+							while (st.hasMoreTokens()) {
+								String name = st.nextToken();
+								if (namelist.containsKey(name)) {
+									System.out.print(namelist.get(name) + " ");
+									msg += namelist.get(name) + " ";
+									present.remove(name);
+								}
+							}
+							System.out.println("just checked out!");
+							msg += "just checked out! ";
+						}
+						
+						if (msg.length() > 0) {
+							// TODO weibo
+						}
+						
+						if (present.size() == 0) {
+							System.out.println("No one is in the lab!");
+							msg = "No one is in the lab!";
+							// TODO weibo
+						}
+						
 					} catch (UnknownHostException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
