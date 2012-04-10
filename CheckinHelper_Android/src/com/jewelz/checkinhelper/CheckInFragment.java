@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
+import weibo4j.examples.MyWeibo;
+
 import com.github.mhendred.face4j.examples.MyExample;
 import com.github.mhendred.face4j.exception.FaceClientException;
 import com.github.mhendred.face4j.exception.FaceServerException;
@@ -315,7 +317,7 @@ public class CheckInFragment extends Fragment {
 								}
 							}
 							System.out.println("just checked in!");
-							msg += "just checkin in! ";
+							msg += "just checked in! ";
 						}					
 						
 						st = new StringTokenizer(outlist);
@@ -333,13 +335,13 @@ public class CheckInFragment extends Fragment {
 						}
 						
 						if (msg.length() > 0) {
-							// TODO weibo
+							MyWeibo.upload(msg, MainActivity.path_ori);
 						}
 						
 						if (present.size() == 0) {
 							System.out.println("No one is in the lab!");
 							msg = "No one is in the lab!";
-							// TODO weibo
+							MyWeibo.update(msg);
 						}
 						
 					} catch (UnknownHostException e) {
