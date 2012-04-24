@@ -29,7 +29,7 @@ public class MyWeibo {
 			weibo.setToken("37c99e4670202a3cccc2e3e5865d16d4",
 					"0232fab516389c7929f35afe78beadc2");
 
-			Status status = weibo.updateStatus(mystatus, 31.018883, 121.430812);
+			Status status = weibo.updateStatus(mystatus, 31.02497, 121.44137);
 			System.out.println("Successfully updated the status to ["
 					+ status.getText() + "].");
 
@@ -58,7 +58,7 @@ public class MyWeibo {
 			try {
 				String s = java.net.URLEncoder.encode(mystatus, "utf-8");
 				Status status = weibo.uploadStatus(s, new File(Filename),
-						31.018883, 121.430812);
+						31.02497, 121.44137);
 
 				System.out.println("Successfully upload the status to ["
 						+ status.getText() + status.getOriginal_pic() + "].");

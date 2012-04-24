@@ -28,10 +28,11 @@ public class SettingsFragment extends PreferenceFragment {
 						MainActivity.prefs.edit()
 								.putString("ip_p", newValue.toString())
 								.commit();
-						return false;
+						MainActivity.SERVER_IP = newValue.toString();
+						return true;
 					}
 				});
-		
+
 		Port_Preference = (EditTextPreference) findPreference("port_p");
 		Port_Preference.setSummary(MainActivity.SERVER_PORT + "");
 		Port_Preference
@@ -43,7 +44,9 @@ public class SettingsFragment extends PreferenceFragment {
 						MainActivity.prefs.edit()
 								.putString("port_p", newValue.toString())
 								.commit();
-						return false;
+						MainActivity.SERVER_PORT = Integer.parseInt(newValue
+								.toString());
+						return true;
 					}
 				});
 	}

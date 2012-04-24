@@ -19,13 +19,13 @@ import osgi_server.gui.RightPanel;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
-	
+
 	LeftPanel leftPanel = new LeftPanel(this);
 	RightPanel rightPanel = new RightPanel();
-	
+
 	String path = System.getProperty("user.home") + "/Moniter_images";
 	String[] ImageList;
-	
+
 	public void init() throws IOException {
 		this.setFont(new Font("Microsoft Yahei", Font.PLAIN, 12));
 		this.setTitle("Moniter System Server");
@@ -37,13 +37,13 @@ public class MainFrame extends JFrame {
 		rightPanel.setPreferredSize(new Dimension(640, 518));
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		refresh();
 		this.setVisible(true);
-		
+
 		final ServerSocket server = new ServerSocket(22222);
 		new Thread() {
-			
+
 			public void run() {
 				while (true) {
 					refresh();
@@ -52,7 +52,8 @@ public class MainFrame extends JFrame {
 						System.out.println("socket accepted");
 						BufferedReader in = new BufferedReader(
 								new InputStreamReader(socket.getInputStream()));
-						PrintWriter out = new PrintWriter(socket.getOutputStream());
+						PrintWriter out = new PrintWriter(
+								socket.getOutputStream());
 						String request = in.readLine();
 						System.out.println(request);
 						if (request != null) {
@@ -62,14 +63,14 @@ public class MainFrame extends JFrame {
 								}
 								out.flush();
 							} else {
-								FileInputStream infile =
-										new FileInputStream(path + "/" + request);
-								DataOutputStream output =
-										new DataOutputStream(socket.getOutputStream());
-								
+								FileInputStream infile = new FileInputStream(
+										path + "/" + request);
+								DataOutputStream output = new DataOutputStream(
+										socket.getOutputStream());
+
 								int size = 8192;
 								byte[] buf = new byte[size];
-								
+
 								while (true) {
 									int read = 0;
 									if (infile != null) {
@@ -93,17 +94,17 @@ public class MainFrame extends JFrame {
 					}
 				}
 			}
-			
+
 		}.start();
 	}
-	
+
 	void updateDetail(String name) {
 		File image = new File(path + "/" + name);
 		if (image.exists() && image.isFile()) {
 			rightPanel.updateDetail(image);
 		}
 	}
-	
+
 	public void refresh() {
 		File folder = new File(path);
 		if ((!folder.exists()) || (!folder.isDirectory())) {
@@ -114,9 +115,9 @@ public class MainFrame extends JFrame {
 		String[] list = new String[filelist.length];
 		int temp = 0;
 		for (int i = 0; i < filelist.length; i++) {
-			if (filelist[i].substring(filelist[i].length() - 3)
-							.toLowerCase().equals("jpg") ||
-					filelist[i].substring(filelist[i].length() - 3)
+			if (filelist[i].substring(filelist[i].length() - 3).toLowerCase()
+					.equals("jpg")
+					|| filelist[i].substring(filelist[i].length() - 3)
 							.toLowerCase().equals("png")) {
 				list[temp++] = filelist[i];
 			}

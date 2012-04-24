@@ -42,12 +42,12 @@ public class ViewFragment extends PreferenceFragment {
 		menu.add(R.string.refresh).setIcon(R.drawable.ic_menu_refresh)
 				.setOnMenuItemClickListener(new OnRefreshListener())
 				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		menu.add(R.string.previous).setIcon(R.drawable.ic_menu_back)
-				.setOnMenuItemClickListener(new OnPreviousListener())
-				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		menu.add(R.string.next).setIcon(R.drawable.ic_menu_forward)
-				.setOnMenuItemClickListener(new OnNextListener())
-				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+//		menu.add(R.string.previous).setIcon(R.drawable.ic_menu_back)
+//				.setOnMenuItemClickListener(new OnPreviousListener())
+//				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+//		menu.add(R.string.next).setIcon(R.drawable.ic_menu_forward)
+//				.setOnMenuItemClickListener(new OnNextListener())
+//				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 	}
 
 	class OnRefreshListener implements OnMenuItemClickListener {

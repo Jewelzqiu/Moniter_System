@@ -52,8 +52,10 @@ public class MainActivity extends Activity {
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
 		mTabsAdapter.addTab(bar.newTab().setText(R.string.check_in),
 				CheckInFragment.class, null);
-		mTabsAdapter.addTab(bar.newTab().setText(R.string.view),
+		mTabsAdapter.addTab(bar.newTab().setText(R.string.statistics),
 				ViewFragment.class, null);
+		mTabsAdapter.addTab(bar.newTab().setText(R.string.lab),
+				LabFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab().setText(R.string.settings),
 				SettingsFragment.class, null);
 

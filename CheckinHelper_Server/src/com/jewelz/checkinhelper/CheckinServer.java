@@ -3,6 +3,7 @@ package com.jewelz.checkinhelper;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,6 +23,7 @@ import java.util.StringTokenizer;
 public class CheckinServer {
 
 	final static String NAMELIST_FILE_NAME = "namelist";
+	final static String img_path = "lab.jpg";
 	HashMap<String, String> NameList = new HashMap<String, String>();
 	ServerSocket server;
 	Thread ServerThread;
@@ -108,13 +110,13 @@ public class CheckinServer {
 					System.out.println(line);
 					StringTokenizer tokenizer = new StringTokenizer(line);
 					String command = tokenizer.nextToken();
-					String data = tokenizer.nextToken();
 					if (command.equals("request")) {
 						writer.println(MD5("radlab"));
 						for (String uid : NameList.keySet()) {
 							writer.println(uid + " " + NameList.get(uid));
 						}
 					} else if (command.equals("check")) {
+						String data = tokenizer.nextToken();
 						System.out.println("checked in at "
 								+ new Date(Long.parseLong(data)));
 						ArrayList<String> names = new ArrayList<String>();
@@ -126,16 +128,40 @@ public class CheckinServer {
 						writer.println(result);
 						System.out.println(names);
 					} else if (command.equals("add")) {
+						String data = tokenizer.nextToken();
 						String name = tokenizer.nextToken();
 						addMember(data, name);
 						System.out.println("added a new member: " + name);
 					} else if (command.equals("remove")) {
+						String data = tokenizer.nextToken();
 						System.out.println("removed a member: "
 								+ removeMember(data));
 					} else if (command.toLowerCase().equals("select")) {
 						String result = database.query(line);
 						System.out.print(result);
 						writer.print(result);
+					} else if (command.equals("labimage")) {
+						FileInputStream infile = new FileInputStream(img_path);
+						DataOutputStream output = new DataOutputStream(
+								socket.getOutputStream());
+
+						int size = 8192;
+						byte[] buf = new byte[size];
+
+						while (true) {
+							int read = 0;
+							if (infile != null) {
+								read = infile.read(buf);
+							}
+							if (read == -1) {
+								break;
+							}
+							output.write(buf);
+						}
+
+						output.flush();
+						infile.close();
+						output.close();
 					}
 					writer.flush();
 					writer.close();

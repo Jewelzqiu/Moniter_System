@@ -57,7 +57,7 @@ public class CheckInFragment extends Fragment {
 
 	static HashMap<String, String> namelist = new HashMap<String, String>();
 	static HashSet<String> present = new HashSet<String>();
-	static int tempdate; 
+	static int tempdate;
 
 	static ImageView Captured_Img;
 
@@ -77,7 +77,7 @@ public class CheckInFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 
 		setHasOptionsMenu(true);
-		
+
 		try {
 			updateNamelist();
 		} catch (Exception e) {
@@ -94,17 +94,17 @@ public class CheckInFragment extends Fragment {
 
 		menu.add(R.string.train).setIcon(android.R.drawable.ic_menu_upload)
 				.setOnMenuItemClickListener(new OnTrainListener())
-				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
 		menu.add(R.string.add).setIcon(R.drawable.ic_menu_invite)
 				.setOnMenuItemClickListener(new OnAddListener())
-				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
 		menu.add(R.string.remove).setIcon(R.drawable.ic_menu_blocked_user)
 				.setOnMenuItemClickListener(new OnRemoveListener())
-				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -217,6 +217,7 @@ public class CheckInFragment extends Fragment {
 	class OnCheckListener implements OnMenuItemClickListener {
 
 		public boolean onMenuItemClick(MenuItem item) {
+			System.out.println(namelist);
 			System.out.println(item.getTitle());
 			File image = new File(MainActivity.path_ori);
 			Uri imageUri = Uri.fromFile(image);
@@ -232,6 +233,7 @@ public class CheckInFragment extends Fragment {
 	class OnTrainListener implements OnMenuItemClickListener {
 
 		public boolean onMenuItemClick(MenuItem item) {
+			System.out.println(namelist);
 			System.out.println(item.getTitle());
 			File image = new File(MainActivity.path_ori);
 			Uri imageUri = Uri.fromFile(image);
@@ -304,46 +306,45 @@ public class CheckInFragment extends Fragment {
 						reader.close();
 						writer.close();
 						socket.close();
-						
+
 						String msg = "";
 						StringTokenizer st = new StringTokenizer(inlist);
 						if (st.hasMoreTokens()) {
 							while (st.hasMoreTokens()) {
 								String name = st.nextToken();
 								if (namelist.containsKey(name)) {
-									System.out.print(namelist.get(name) + " ");
 									msg += namelist.get(name) + " ";
 									present.add(name);
 								}
 							}
-							System.out.println("just checked in!");
-							msg += "just checked in! ";
-						}					
-						
+							msg += "just checked in!\n";
+						}
+
 						st = new StringTokenizer(outlist);
 						if (st.hasMoreTokens()) {
 							while (st.hasMoreTokens()) {
 								String name = st.nextToken();
 								if (namelist.containsKey(name)) {
-									System.out.print(namelist.get(name) + " ");
 									msg += namelist.get(name) + " ";
 									present.remove(name);
 								}
 							}
-							System.out.println("just checked out!");
-							msg += "just checked out! ";
+							msg += "just checked out!\n";
 						}
-						
+
 						if (msg.length() > 0) {
+							if (present.size() == 0) {
+								msg += "There is no one in the lab!";
+							} else {
+								for (String id : present) {
+									msg += namelist.get(id) + " ";
+								}
+								msg += "is in the lab!";
+							}
+							System.out.println(msg);
 							MyWeibo.upload(msg, MainActivity.path_ori);
 						}
-						
-						if (present.size() == 0) {
-							System.out.println("No one is in the lab!");
-							msg = "No one is in the lab!";
-							MyWeibo.update(msg);
-						}
-						
+
 					} catch (UnknownHostException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
@@ -363,7 +364,17 @@ public class CheckInFragment extends Fragment {
 			uids = "";
 			CheckInFragment.count++;
 			if (CheckInFragment.count >= 3) {
-				// TODO
+				new Thread() {
+
+					public void run() {
+						System.out.println("who is this guy?");
+						MyWeibo.upload("Who is this guy?",
+								MainActivity.path_ori);
+						CheckInFragment.count = 0;
+					}
+
+				}.start();
+
 			}
 			dismissAll();
 			SorryDialog.show();
@@ -449,7 +460,7 @@ public class CheckInFragment extends Fragment {
 				} else {
 					handler.post(new ShowSorry());
 				}
-				
+
 			}
 
 		}.start();

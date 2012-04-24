@@ -64,7 +64,7 @@ public class MyExample {
 				if (list.contains(guess.first.substring(0, guess.first.indexOf('@')))) {
 					continue;
 				}
-				if (guess.second > 80) {
+				if (guess.second > 40) {
 					list.add(guess.first.substring(0, guess.first.indexOf('@')));
 				}
 			}
